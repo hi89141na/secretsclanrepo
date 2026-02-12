@@ -29,8 +29,8 @@ const ProductCard = ({ product }) => {
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
       whileHover={{ y: -8 }}
-      className={`group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 $\{isOutOfStock ? 'opacity-75' : ''}`}>
-      <Link to={`/products/$\{product._id}`} className="block relative overflow-hidden aspect-[4/3]">
+      className={`group bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 dark:border-gray-700 Green{isOutOfStock ? 'opacity-75' : ''}`}>
+      <Link to={`/products/Green{product._id}`} className="block relative overflow-hidden aspect-[4/3]">
         {isOnSale && !isOutOfStock && (
           <motion.div
             initial={{ scale: 0, rotate: -12 }}
@@ -52,7 +52,7 @@ const ProductCard = ({ product }) => {
         <img
           src={imageUrl}
           alt={product.name}
-          className={`w-full h-full object-cover transition-all duration-500 $\{imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'} group-hover:scale-110`}
+          className={`w-full h-full object-cover transition-all duration-500 Green{imageLoaded ? 'opacity-100 scale-100' : 'opacity-0 scale-95'} group-hover:scale-110`}
           onLoad={() => setImageLoaded(true)}
           onError={(e) => { e.target.src = 'https://via.placeholder.com/300'; }} />
         
@@ -60,7 +60,7 @@ const ProductCard = ({ product }) => {
       </Link>
 
       <div className="p-5">
-        <Link to={`/products/$\{product._id}`}>
+        <Link to={`/products/Green{product._id}`}>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors line-clamp-2 mb-2">
             {product.name}
           </h3>
@@ -127,4 +127,3 @@ const ProductCard = ({ product }) => {
 };
 
 export default ProductCard;
-

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { productAPI, categoryAPI, uploadAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 
@@ -156,6 +156,7 @@ const ManageProductsPage = () => {
       }
 
       setShowModal(false);
+      fetchProducts();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to save product');
     }
@@ -188,10 +189,10 @@ const ManageProductsPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="bg-white rounded-lg shadow-md p-6">
+    <div className="container mx-auto px-4 py-8 min-h-screen bg-white dark:bg-gray-900 transition-colors">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-900">Manage Products</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Manage Products</h1>
           <button
             onClick={handleAdd}
             className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
@@ -201,33 +202,33 @@ const ManageProductsPage = () => {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-700/50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Image
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Category
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Price
                 </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Stock
                 </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {products && products.length > 0 ? (
                 products.map((product) => (
-                  <tr key={product._id} className="hover:bg-gray-50">
+                  <tr key={product._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <img
                         src={product.images?.[0] || product.image || placeholderImage}
@@ -238,45 +239,45 @@ const ManageProductsPage = () => {
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-2">
-                        <div className="text-sm font-medium text-gray-900">{product.name}</div>
+                        <div className="text-sm font-medium text-gray-900 dark:text-white">{product.name}</div>
                         {product.featured && (
-                          <span className="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 text-yellow-800">
-                            ÃƒÂ¢Ã‚Â­Ã‚Â Featured
+                          <span className="px-2 py-1 text-xs font-semibold rounded bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200">
+                            Featured
                           </span>
                         )}
                         {product.salePrice && product.salePrice < product.price && (
-                          <span className="px-2 py-1 text-xs font-semibold rounded bg-red-100 text-red-800">
+                          <span className="px-2 py-1 text-xs font-semibold rounded bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200">
                           Sale
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-gray-500 truncate max-w-xs">
+                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                         {product.description}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
                         {product.category?.name || 'N/A'}
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
                       {product.salePrice && product.salePrice < product.price ? (
                         <div>
-                          <div className="text-gray-900 font-semibold">${product.salePrice.toFixed(2)}</div>
-                          <div className="text-gray-500 line-through text-xs">${product.price.toFixed(2)}</div>
+                          <div className="text-gray-900 font-semibold">Rs. {product.salePrice.toFixed(2)}</div>
+                          <div className="text-gray-500 dark:text-gray-400 line-through text-xs">Rs. {product.price.toFixed(2)}</div>
                         </div>
                       ) : (
-                        <div className="text-gray-900">${product.price.toFixed(2)}</div>
+                        <div className="text-gray-900 dark:text-white">Rs. {product.price.toFixed(2)}</div>
                       )}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full Rs. ${
                           product.stock > 10
-                            ? 'bg-green-100 text-green-800'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
                             : product.stock > 0
-                            ? 'bg-yellow-100 text-yellow-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200'
+                            : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200'
                         }`}
                       >
                         {product.stock}
@@ -300,7 +301,7 @@ const ManageProductsPage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-8 text-gray-500">
+                  <td colSpan="6" className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No products found
                   </td>
                 </tr>
@@ -311,7 +312,7 @@ const ManageProductsPage = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div className="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-80 overflow-y-auto h-full w-full z-50">
           <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
@@ -320,7 +321,7 @@ const ManageProductsPage = () => {
               <form onSubmit={handleSubmit}>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Product Name
                     </label>
                     <input
@@ -328,13 +329,13 @@ const ManageProductsPage = () => {
                       name="name"
                       value={formData.name}
                       onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Description
                     </label>
                     <textarea
@@ -342,14 +343,14 @@ const ManageProductsPage = () => {
                       value={formData.description}
                       onChange={handleInputChange}
                       rows="3"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Price ($)
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                      Price (Rs.)
                     </label>
                     <input
                       type="number"
@@ -358,13 +359,13 @@ const ManageProductsPage = () => {
                       onChange={handleInputChange}
                       step="0.01"
                       min="0"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Stock
                     </label>
                     <input
@@ -373,20 +374,20 @@ const ManageProductsPage = () => {
                       value={formData.stock}
                       onChange={handleInputChange}
                       min="0"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Category
                     </label>
                     <select
                       name="category"
                       value={formData.category}
                       onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
                       <option value="">Select Category</option>
@@ -410,14 +411,14 @@ const ManageProductsPage = () => {
                       onChange={(e) => setFormData((prev) => ({ ...prev, featured: e.target.checked }))}
                       className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                     />
-                    <label className="ml-2 block text-sm text-gray-900">
+                    <label className="ml-2 block text-sm text-gray-900 dark:text-white">
                       Featured Product
                     </label>
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
-                      Sale Price ($) <span className="text-gray-500 font-normal text-xs">(Optional)</span>
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                      Sale Price (Rs.) <span className="text-gray-500 dark:text-gray-400 font-normal text-xs">(Optional)</span>
                     </label>
                     <input
                       type="number"
@@ -427,12 +428,12 @@ const ManageProductsPage = () => {
                       step="0.01"
                       min="0"
                       placeholder="Leave empty if no sale"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Sale Start Date
                     </label>
                     <input
@@ -440,12 +441,12 @@ const ManageProductsPage = () => {
                       name="saleStartDate"
                       value={formData.saleStartDate}
                       onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Sale End Date
                     </label>
                     <input
@@ -453,7 +454,7 @@ const ManageProductsPage = () => {
                       name="saleEndDate"
                       value={formData.saleEndDate}
                       onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   {(formData.salePrice || formData.saleStartDate || formData.saleEndDate) && (
                     <div className="md:col-span-2">
@@ -462,7 +463,7 @@ const ManageProductsPage = () => {
                         onClick={handleRemoveSale}
                         className="w-full bg-red-100 hover:bg-red-200 text-red-700 font-semibold py-2 px-4 rounded border border-red-300 transition-colors"
                       >
-                        🗑️ Remove Sale/Offer
+                        ??? Remove Sale/Offer
                       </button>
                     </div>
                   )}
@@ -470,14 +471,14 @@ const ManageProductsPage = () => {
                   </div>
 
                   <div className="md:col-span-2">
-                    <label className="block text-gray-700 text-sm font-bold mb-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Product Image
                     </label>
                     <input
                       type="file"
                       accept="image/*"
                       onChange={handleImageChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                     {imagePreview && (
                       <img
@@ -515,6 +516,11 @@ const ManageProductsPage = () => {
 };
 
 export default ManageProductsPage;
+
+
+
+
+
 
 
 

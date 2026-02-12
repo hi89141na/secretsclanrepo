@@ -15,7 +15,7 @@ const CartItem = ({ item }) => {
       />
       <div className="flex-1 ml-4">
         <h3 className="font-semibold">{item.name}</h3>
-        <p className="text-gray-600">${item.price.toFixed(2)}</p>
+        <p className="text-gray-600">Rs. {item.price.toFixed(2)}</p>
       </div>
       <div className="flex items-center space-x-4">
         <div className="flex items-center border rounded">
@@ -36,7 +36,7 @@ const CartItem = ({ item }) => {
           </button>
         </div>
         <div className="w-24 text-right font-semibold">
-          ${(item.price * item.quantity).toFixed(2)}
+          Rs. ${(item.price * item.quantity).toFixed(2)}
         </div>
         <Button
           variant="danger"
@@ -51,3 +51,4 @@ const CartItem = ({ item }) => {
 };
 
 export default CartItem;
+

@@ -12,7 +12,7 @@ const CartPage = () => {
     if (newQuantity < 1) return;
     const item = cart.find(item => item._id === productId);
     if (item && newQuantity > item.stock) {
-      toast.error(`Only ${item.stock} items available in stock`);
+      toast.error(`Only Rs.${item.stock} items available in stock`);
       return;
     }
     updateQuantity(productId, newQuantity);
@@ -123,10 +123,10 @@ const CartPage = () => {
                     {/* Price */}
                     <div className="text-right">
                       <p className="text-2xl font-bold text-indigo-600">
-                        ${(item.price * item.quantity).toFixed(2)}
+                        Rs.{(item.price * item.quantity).toFixed(2)}
                       </p>
                       <p className="text-sm text-gray-500">
-                        ${item.price.toFixed(2)} each
+                        Rs.{item.price.toFixed(2)} each
                       </p>
                     </div>
                   </div>
@@ -174,7 +174,7 @@ const CartPage = () => {
               
               <div className="flex justify-between text-gray-600">
                 <span>Subtotal:</span>
-                <span className="font-medium">${getCartTotal().toFixed(2)}</span>
+                <span className="font-medium">Rs. {getCartTotal().toFixed(2)}</span>
               </div>
               
               <div className="flex justify-between text-gray-600">
@@ -183,21 +183,21 @@ const CartPage = () => {
                   {getCartTotal() > 50 ? (
                     <span className="text-green-600">FREE</span>
                   ) : (
-                    '$5.00'
+                    'Rs. 5.00'
                   )}
                 </span>
               </div>
               
               {getCartTotal() <= 50 && (
                 <p className="text-sm text-gray-500">
-                  Add ${(50 - getCartTotal()).toFixed(2)} more for free shipping!
+                  Add Rs. {(50 - getCartTotal()).toFixed(2)} more for free shipping!
                 </p>
               )}
               
               <div className="border-t pt-3 flex justify-between text-lg font-bold">
                 <span>Total:</span>
                 <span className="text-indigo-600">
-                  ${(getCartTotal() + (getCartTotal() > 50 ? 0 : 5)).toFixed(2)}
+                  Rs. {(getCartTotal() + (getCartTotal() > 50 ? 0 : 5)).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -228,3 +228,4 @@ const CartPage = () => {
 };
 
 export default CartPage;
+

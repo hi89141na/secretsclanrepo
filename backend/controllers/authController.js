@@ -1,4 +1,4 @@
-﻿const User = require('../models/User');
+const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
 const { sendEmail, emailTemplates } = require('../services/emailService');
 
@@ -19,7 +19,7 @@ const register = async (req, res) => {
     // Send welcome email
     try {
       const welcomeTemplate = emailTemplates.registration(user.name);
-      await sendEmail(user.email, welcomeTemplate);
+      await sendEmail(user.email, welcomeTemplate.subject, welcomeTemplate.text, welcomeTemplate.html);
       console.log(`Welcome email sent to ${user.email}`);
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError.message);
@@ -158,3 +158,4 @@ const updateProfile = async (req, res) => {
 };
 
 module.exports = { register, login, getProfile, updateProfile };
+

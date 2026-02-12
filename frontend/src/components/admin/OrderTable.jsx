@@ -65,10 +65,10 @@ const OrderTable = ({ orders, onUpdate }) => {
                 </div>
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm">
-                ${order.totalAmount.toFixed(2)}
+                Rs. ${order.totalAmount.toFixed(2)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
-                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(order.status)}`}>
+                <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full Rs. ${getStatusColor(order.status)}`}>
                   {order.status}
                 </span>
               </td>
@@ -97,3 +97,4 @@ const OrderTable = ({ orders, onUpdate }) => {
 };
 
 export default OrderTable;
+

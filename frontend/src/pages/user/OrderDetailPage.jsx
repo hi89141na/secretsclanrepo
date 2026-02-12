@@ -88,7 +88,7 @@ const OrderDetailPage = () => {
               })}
             </p>
           </div>
-          <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(order.orderStatus)}`}>
+          <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium Rs. ${getStatusColor(order.orderStatus)}`}>
             {order.orderStatus?.charAt(0).toUpperCase() + order.orderStatus?.slice(1)}
           </span>
         </div>
@@ -118,11 +118,11 @@ const OrderDetailPage = () => {
                     </Link>
                     <div className="flex justify-between items-center mt-2">
                       <span className="text-sm text-gray-600">Quantity: {item.quantity}</span>
-                      <span className="font-semibold">${item.price?.toFixed(2)}</span>
+                      <span className="font-semibold">Rs. {item.price?.toFixed(2)}</span>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-lg">${(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-bold text-lg">Rs. {(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
               ))}
@@ -157,7 +157,7 @@ const OrderDetailPage = () => {
             <div className="space-y-3 mb-4">
               <div className="border-t pt-3 flex justify-between text-lg font-bold">
                 <span>Total:</span>
-                <span className="text-indigo-600">${order.totalAmount?.toFixed(2)}</span>
+                <span className="text-indigo-600">Rs. {order.totalAmount?.toFixed(2)}</span>
               </div>
             </div>
 
@@ -237,3 +237,4 @@ const OrderDetailPage = () => {
 };
 
 export default OrderDetailPage;
+

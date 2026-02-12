@@ -1,10 +1,11 @@
-﻿import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useRef } from 'react';
 import { toast } from 'react-toastify';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
+  const toastShownRef = useRef(false);
 
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
@@ -18,19 +19,21 @@ export const CartProvider = ({ children }) => {
   }, [cart]);
 
   const addToCart = (product, quantity = 1) => {
-    setCart(prevCart => {
-      const existingItem = prevCart.find(item => item._id === product._id);
-      if (existingItem) {
-        toast.info('Updated quantity in cart');
-        return prevCart.map(item =>
+    const existingItem = cart.find(item => item._id === product._id);
+    
+    if (existingItem) {
+      setCart(prevCart =>
+        prevCart.map(item =>
           item._id === product._id
             ? { ...item, quantity: item.quantity + quantity }
             : item
-        );
-      }
+        )
+      );
+      toast.info('Updated quantity in cart');
+    } else {
+      setCart(prevCart => [...prevCart, { ...product, quantity }]);
       toast.success('Added to cart!');
-      return [...prevCart, { ...product, quantity }];
-    });
+    }
   };
 
   const removeFromCart = (productId) => {

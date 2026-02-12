@@ -1,4 +1,4 @@
-﻿const Order = require('../models/Order');
+const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { sendEmail, emailTemplates } = require('../services/emailService');
 
@@ -65,7 +65,7 @@ const createOrder = async (req, res) => {
         order._id.toString(),
         order.totalAmount
       );
-      await sendEmail(req.user.email, orderEmailTemplate);
+      await sendEmail(req.user.email, orderEmailTemplate.subject, orderEmailTemplate.text, orderEmailTemplate.html);
       console.log(`Order placed email sent to ${req.user.email}`);
     } catch (emailError) {
       console.error('Failed to send order email:', emailError.message);
@@ -178,7 +178,7 @@ const updateOrderStatus = async (req, res) => {
         status,
         status === 'cancelled' ? order.cancellationReason : null
       );
-      await sendEmail(order.user.email, statusEmailTemplate);
+      await sendEmail(order.user.email, statusEmailTemplate.subject, statusEmailTemplate.text, statusEmailTemplate.html);
       console.log(`Order status update email sent to ${order.user.email}`);
     } catch (emailError) {
       console.error('Failed to send status update email:', emailError.message);
@@ -236,7 +236,7 @@ const cancelOrder = async (req, res) => {
         'cancelled',
         order.cancellationReason
       );
-      await sendEmail(order.user.email, cancelEmailTemplate);
+      await sendEmail(order.user.email, cancelEmailTemplate.subject, cancelEmailTemplate.text, cancelEmailTemplate.html);
       console.log(`Order cancellation email sent to ${order.user.email}`);
     } catch (emailError) {
       console.error('Failed to send cancellation email:', emailError.message);
@@ -257,3 +257,5 @@ module.exports = {
   updateOrderStatus,
   cancelOrder
 };
+
+

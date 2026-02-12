@@ -1,4 +1,4 @@
-﻿const User = require('../models/User');
+const User = require('../models/User');
 const { sendEmail, emailTemplates } = require('../services/emailService');
 
 // @desc    Send bulk promotional email to all users
@@ -43,7 +43,7 @@ exports.sendBulkPromotionalEmail = async (req, res) => {
           offerDetails || null
         );
 
-        const result = await sendEmail(user.email, emailTemplate);
+        const result = await sendEmail(user.email, emailTemplate.subject, emailTemplate.text, emailTemplate.html);
         
         if (result.success) {
           results.successful++;
@@ -99,7 +99,7 @@ exports.sendTestEmail = async (req, res) => {
       html: `<div style='font-family: Arial; max-width: 600px;'><h2>Test Email</h2><p>${message}</p></div>`
     };
 
-    const result = await sendEmail(email, emailTemplate);
+    const result = await sendEmail(email, emailTemplate.subject, emailTemplate.text, emailTemplate.html);
 
     if (result.success) {
       res.json({ 
@@ -120,3 +120,4 @@ exports.sendTestEmail = async (req, res) => {
     });
   }
 };
+

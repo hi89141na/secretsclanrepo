@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { productAPI, reviewAPI } from '../../services/api';
 import { useCart } from '../../hooks/useCart';
@@ -69,18 +69,18 @@ const ProductDetailPage = () => {
             return isOnSale ? (
               <div className="mb-4">
                 <div className="flex items-center gap-3">
-                  <p className="text-4xl font-bold text-red-600">${product.salePrice.toFixed(2)}</p>
-                  <p className="text-2xl text-gray-500 line-through">${product.price.toFixed(2)}</p>
+                  <p className="text-4xl font-bold text-red-600">Rs. {product.salePrice.toFixed(2)}</p>
+                  <p className="text-2xl text-gray-500 line-through">Rs. {product.price.toFixed(2)}</p>
                 </div>
                 <span className="inline-block bg-red-100 text-red-600 text-sm font-semibold px-3 py-1 rounded mt-2">ON SALE</span>
               </div>
             ) : (
-              <p className="text-4xl font-bold text-indigo-600 mb-4">${product.price.toFixed(2)}</p>
+              <p className="text-4xl font-bold text-indigo-600 mb-4">Rs. {product.price.toFixed(2)}</p>
             );
           })()}
           
           <div className="mb-4">
-            <span className={`px-3 py-1 rounded-full text-sm ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+            <span className={`px-3 py-1 rounded-full text-sm Rs. ${product.stock > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
               {product.stock > 0 ? `In Stock (${product.stock} available)` : 'Out of Stock'}
             </span>
           </div>
@@ -132,3 +132,5 @@ const ProductDetailPage = () => {
 };
 
 export default ProductDetailPage;
+
+

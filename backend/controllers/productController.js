@@ -3,11 +3,18 @@ const { uploadToCloudinary, deleteFromCloudinary } = require('../utils/cloudinar
 
 const getProducts = async (req, res) => {
   try {
-    const { category, featured, search } = req.query;
+    const { category, featured, search, minPrice, maxPrice } = req.query;
     let filter = {};
     if (category) filter.category = category;
     if (featured === 'true') filter.featured = true;
     if (search) filter.name = { $regex: search, $options: 'i' };
+    
+    // Price range filtering
+    if (minPrice || maxPrice) {
+      filter.price = {};
+      if (minPrice) filter.price.$gte = parseFloat(minPrice);
+      if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
+    }
     const products = await Product.find(filter).populate('category', 'name slug').sort({ createdAt: -1 });
     res.json({ success: true, count: products.length, data: products });
   } catch (error) {
@@ -167,3 +174,5 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = { getProducts, getFeaturedProducts, getProduct, getProductsByCategory, createProduct, updateProduct, deleteProduct };
+
+
