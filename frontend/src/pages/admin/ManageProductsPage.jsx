@@ -3,7 +3,10 @@ import { productAPI, categoryAPI, uploadAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 import useConfirm from '../../hooks/useConfirm';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import Button from '../../components/common/Button';
+import Input from '../../components/common/Input';
 const ManageProductsPage = () => {
+  const { confirmState, showConfirm, handleConfirm, handleCancel } = useConfirm();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,7 +115,7 @@ const ManageProductsPage = () => {
   if (!confirmed) return;
 
   try {
-    await axios.delete(`/api/products/${id}`);
+    await productAPI.delete(id);
     toast.success('Product deleted successfully');
     fetchProducts();
   } catch (error) {
@@ -320,211 +323,209 @@ const ManageProductsPage = () => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-80 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-                {selectedProduct ? 'Edit Product' : 'Add Product'}
-              </h3>
-              <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Product Name
-                    </label>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    />
-                  </div>
+            {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">
+              {selectedProduct ? 'Edit Product' : 'Add Product'}
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <Input
+                    label="Product Name"
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                  />
+                </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Description
-                    </label>
-                    <textarea
-                      name="description"
-                      value={formData.description}
-                      onChange={handleInputChange}
-                      rows="3"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    />
-                  </div>
+                <div className="md:col-span-2">
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    Description
+                  </label>
+                  <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    rows="3"
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Price (Rs.)
-                    </label>
-                    <input
-                      type="number"
-                      name="price"
-                      value={formData.price}
-                      onChange={handleInputChange}
-                      step="0.01"
-                      min="0"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    />
-                  </div>
+                <div>
+                  <Input
+                    label="Price (Rs.)"
+                    type="number"
+                    name="price"
+                    value={formData.price}
+                    onChange={handleInputChange}
+                    step="0.01"
+                    min="0"
+                    required
+                  />
+                </div>
 
-                  <div>
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Stock
-                    </label>
-                    <input
-                      type="number"
-                      name="stock"
-                      value={formData.stock}
-                      onChange={handleInputChange}
-                      min="0"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    />
-                  </div>
+                <div>
+                  <Input
+                    label="Stock"
+                    type="number"
+                    name="stock"
+                    value={formData.stock}
+                    onChange={handleInputChange}
+                    min="0"
+                    required
+                  />
+                </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Category
-                    </label>
-                    <select
-                      name="category"
-                      value={formData.category}
-                      onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                      required
-                    >
-                      <option value="">Select Category</option>
-                      {categories && categories.length > 0 ? (
-                        categories.map((cat) => (
-                          <option key={cat._id} value={cat._id}>
-                            {cat.name}
-                          </option>
-                        ))
-                      ) : (
-                        <option disabled>No categories available</option>
-                      )}
-                    </select>
-                  </div>
-
-                  <div className="md:col-span-2 flex items-center">
-                    <input
-                      type="checkbox"
-                      name="featured"
-                      checked={formData.featured}
-                      onChange={(e) => setFormData((prev) => ({ ...prev, featured: e.target.checked }))}
-                      className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-                    />
-                    <label className="ml-2 block text-sm text-gray-900 dark:text-white">
-                      Featured Product
-                    </label>
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Sale Price (Rs.) <span className="text-gray-500 dark:text-gray-400 font-normal text-xs">(Optional)</span>
-                    </label>
-                    <input
-                      type="number"
-                      name="salePrice"
-                      value={formData.salePrice}
-                      onChange={handleInputChange}
-                      step="0.01"
-                      min="0"
-                      placeholder="Leave empty if no sale"
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Sale Start Date
-                    </label>
-                    <input
-                      type="date"
-                      name="saleStartDate"
-                      value={formData.saleStartDate}
-                      onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Sale End Date
-                    </label>
-                    <input
-                      type="date"
-                      name="saleEndDate"
-                      value={formData.saleEndDate}
-                      onChange={handleInputChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                    />
-                  {(formData.salePrice || formData.saleStartDate || formData.saleEndDate) && (
-                    <div className="md:col-span-2">
-                      <button
-                        type="button"
-                        onClick={handleRemoveSale}
-                        className="w-full bg-red-100 hover:bg-red-200 text-red-700 font-semibold py-2 px-4 rounded border border-red-300 transition-colors"
-                      >
-                        ??? Remove Sale/Offer
-                      </button>
-                    </div>
-                  )}
-
-                  </div>
-
-                  <div className="md:col-span-2">
-                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
-                      Product Image
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
-                    />
-                    {imagePreview && (
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="mt-2 h-32 w-32 object-cover rounded"
-                        onError={handleImageError}
-                      />
+                <div className="md:col-span-2">
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={formData.category}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    {categories && categories.length > 0 ? (
+                      categories.map((cat) => (
+                        <option key={cat._id} value={cat._id}>
+                          {cat.name}
+                        </option>
+                      ))
+                    ) : (
+                      <option disabled>No categories available</option>
                     )}
-                  </div>
+                  </select>
                 </div>
 
-                <div className="flex items-center justify-end space-x-2 mt-6">
-                  <button
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                  >
-                    {selectedProduct ? 'Update Product' : 'Create Product'}
-                  </button>
+                <div className="md:col-span-2 flex items-center">
+                  <input
+                    type="checkbox"
+                    name="featured"
+                    checked={formData.featured}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, featured: e.target.checked }))}
+                    className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                  />
+                  <label className="ml-2 block text-sm text-gray-900 dark:text-white font-semibold">
+                    Featured Product
+                  </label>
                 </div>
-              </form>
-            </div>
+
+                {/* Sale Information */}
+                <div className="md:col-span-2">
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Sale Information (Optional)</h3>
+                </div>
+
+                <div>
+                  <Input
+                    label="Sale Price (Rs.)"
+                    type="number"
+                    name="salePrice"
+                    value={formData.salePrice}
+                    onChange={handleInputChange}
+                    step="0.01"
+                    min="0"
+                    placeholder="Leave empty if no sale"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  {(formData.salePrice || formData.saleStartDate || formData.saleEndDate) && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleRemoveSale}
+                      fullWidth
+                      className="text-red-600 dark:text-red-400 border-red-600 dark:border-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                    >
+                      ✕ Remove Sale
+                    </Button>
+                  )}
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    Sale Start Date
+                  </label>
+                  <input
+                    type="date"
+                    name="saleStartDate"
+                    value={formData.saleStartDate}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    Sale End Date
+                  </label>
+                  <input
+                    type="date"
+                    name="saleEndDate"
+                    value={formData.saleEndDate}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                    Product Image
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="w-full text-gray-900 dark:text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 dark:file:bg-indigo-900/30 dark:file:text-indigo-400"
+                  />
+                  {imagePreview && (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="mt-3 h-40 w-40 object-cover rounded-lg border-2 border-gray-200 dark:border-gray-600"
+                      onError={handleImageError}
+                    />
+                  )}
+                </div>
+              </div>
+
+              <div className="flex gap-3 mt-6">
+                <Button type="submit" fullWidth>
+                  {selectedProduct ? 'Update Product' : 'Create Product'}
+                </Button>
+                <Button type="button" variant="outline" fullWidth onClick={() => setShowModal(false)}>
+                  Cancel
+                </Button>
+              </div>
+            </form>
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmState.isOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title={confirmState.title}
+        message={confirmState.message}
+        confirmText={confirmState.confirmText}
+        cancelText={confirmState.cancelText}
+        variant={confirmState.variant}
+      />
     </div>
   );
 };
 
 export default ManageProductsPage;
+
 
 
 

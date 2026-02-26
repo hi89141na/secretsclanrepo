@@ -5,8 +5,11 @@ import Loader from '../../components/common/Loader';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { toast } from 'react-toastify';
+import useConfirm from '../../hooks/useConfirm';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const ManageCategoriesPage = () => {
+  const { showConfirm, confirmState, handleConfirm, handleCancel } = useConfirm();
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -82,17 +85,26 @@ const ManageCategoriesPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
-    try {
-      await categoryAPI.delete(id);
-      toast.success('Category deleted successfully');
-      fetchCategories();
-    } catch (error) {
-      console.error('Error deleting category:', error);
-      toast.error('Failed to delete category');
-    }
-  };
+ const handleDelete = async (id) => {
+  const confirmed = await showConfirm({
+    title: 'Delete Category?',
+    message: 'Are you sure you want to delete this category? This action cannot be undone.',
+    confirmText: 'Delete',
+    cancelText: 'Cancel',
+    variant: 'danger',
+  });
+
+  if (!confirmed) return;
+
+  try {
+    await categoryAPI.delete(id);
+    toast.success('Category deleted successfully');
+    fetchCategories();
+  } catch (error) {
+    console.error('Error deleting category:', error);
+    toast.error('Failed to delete category');
+  }
+};
 
   const handleCloseModal = () => {
     setShowModal(false);
@@ -135,6 +147,7 @@ const ManageCategoriesPage = () => {
         ))}
       </div>
 
+      {/* Add/Edit Modal */}
       {/* Add/Edit Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -187,6 +200,17 @@ const ManageCategoriesPage = () => {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        isOpen={confirmState.isOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        title={confirmState.title}
+        message={confirmState.message}
+        confirmText={confirmState.confirmText}
+        cancelText={confirmState.cancelText}
+        variant={confirmState.variant}
+      />
     </div>
   );
 };

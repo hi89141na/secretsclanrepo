@@ -77,7 +77,7 @@ const ManageOrdersPage = () => {
   return (
     <div className="container mx-auto px-4 py-8 min-h-screen bg-white dark:bg-gray-900 transition-colors">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Manage Orders</h1>
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Manage Orders</h1>
         <Link to="/admin">
           <Button variant="outline">Back to Dashboard</Button>
         </Link>
@@ -87,31 +87,31 @@ const ManageOrdersPage = () => {
       <div className="flex flex-wrap gap-2 mb-6">
         <button
           onClick={() => setFilter('all')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors Rs. ${filter === 'all' ? 'bg-indigo-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'all' ? 'bg-indigo-600 text-white dark:bg-indigo-500' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
         >
           All ({orders.length})
         </button>
         <button
           onClick={() => setFilter('pending')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors Rs. ${filter === 'pending' ? 'bg-yellow-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'pending' ? 'bg-yellow-600 text-white dark:bg-yellow-500' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
         >
           Pending ({orders.filter(o => o.orderStatus === 'pending').length})
         </button>
         <button
           onClick={() => setFilter('confirmed')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors Rs. ${filter === 'confirmed' ? 'bg-blue-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'confirmed' ? 'bg-blue-600 text-white dark:bg-blue-500' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
         >
           Confirmed ({orders.filter(o => o.orderStatus === 'confirmed').length})
         </button>
         <button
           onClick={() => setFilter('shipped')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors Rs. ${filter === 'shipped' ? 'bg-purple-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'shipped' ? 'bg-purple-600 text-white dark:bg-purple-500' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
         >
           Shipped ({orders.filter(o => o.orderStatus === 'shipped').length})
         </button>
         <button
           onClick={() => setFilter('delivered')}
-          className={`px-4 py-2 rounded-lg font-medium transition-colors Rs. ${filter === 'delivered' ? 'bg-green-600 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
+          className={`px-4 py-2 rounded-lg font-medium transition-colors ${filter === 'delivered' ? 'bg-green-600 text-white dark:bg-green-500' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'}`}
         >
           Delivered ({orders.filter(o => o.orderStatus === 'delivered').length})
         </button>
@@ -144,7 +144,7 @@ const ManageOrdersPage = () => {
                   return (
                     <tr key={order._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        <Link to={`/orders/${order._id}`} className="text-indigo-600 hover:text-indigo-900">
+                        <Link to={`/orders/${order._id}`} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">
                           #{order._id?.slice(-8)}
                         </Link>
                       </td>
@@ -156,11 +156,11 @@ const ManageOrdersPage = () => {
                         {order.orderItems?.length || 0} items
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                        Rs. ${order.totalAmount?.toFixed(2)}
+                        Rs. {order.totalAmount?.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {isDisabled ? (
-                          <span className={`text-xs font-semibold rounded-full px-3 py-1 inline-block Rs. ${getStatusColor(order.orderStatus)}`}>
+                          <span className={`text-xs font-semibold rounded-full px-3 py-1 inline-block ${getStatusColor(order.orderStatus)}`}>
                             {order.orderStatus.charAt(0).toUpperCase() + order.orderStatus.slice(1)}
                             {order.isCancelled && ' (Locked)'}
                             {order.orderStatus === 'delivered' && !order.isCancelled && ' (Locked)'}
@@ -169,7 +169,7 @@ const ManageOrdersPage = () => {
                           <select
                             value={order.orderStatus}
                             onChange={(e) => handleStatusUpdate(order._id, e.target.value)}
-                            className={`text-xs font-semibold rounded-full px-3 py-1 Rs. ${getStatusColor(order.orderStatus)} border-0 cursor-pointer`}
+                            className={`text-xs font-semibold rounded-full px-3 py-1 ${getStatusColor(order.orderStatus)} border-0 cursor-pointer`}
                           >
                             <option value="pending">Pending</option>
                             <option value="confirmed">Confirmed</option>
@@ -183,7 +183,7 @@ const ManageOrdersPage = () => {
                         {new Date(order.createdAt).toLocaleDateString()}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <Link to={`/orders/${order._id}`} className="text-indigo-600 hover:text-indigo-900">
+                        <Link to={`/orders/${order._id}`} className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300">
                           View Details
                         </Link>
                       </td>
