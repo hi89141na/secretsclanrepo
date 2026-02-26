@@ -241,7 +241,7 @@ router.post('/test', protect, admin, async (req, res) => {
   }
 
   try {
-    const testEmail = process.env.TEST_EMAIL || req.user.email;
+    const testEmail = req.user.email;
 
     const result = await sendEmail(
       testEmail,

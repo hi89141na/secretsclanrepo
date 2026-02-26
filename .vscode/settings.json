@@ -3,5 +3,8 @@
         "Set-Content": true,
         "New-Item": true,
         "Out-Null": true
-    }
+    },
+    "workbench.editor.defaultBinaryEditor": "copilot-chat-replay",
+    "github.copilot.chat.agent.autoFix": true,
+    "github.copilot.chat.switchAgent.enabled": true
 }

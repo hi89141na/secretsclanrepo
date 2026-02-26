@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { productAPI, categoryAPI, uploadAPI } from '../../services/api';
 import { toast } from 'react-toastify';
-
+import useConfirm from '../../hooks/useConfirm';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 const ManageProductsPage = () => {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -99,17 +100,25 @@ const ManageProductsPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (productId) => {
-    if (!window.confirm('Are you sure you want to delete this product?')) return;
+ const handleDelete = async (id) => {
+  const confirmed = await showConfirm({
+    title: 'Delete Product?',
+    message: 'Are you sure you want to delete this product? This action cannot be undone.',
+    confirmText: 'Delete',
+    cancelText: 'Cancel',
+    variant: 'danger',
+  });
 
-    try {
-      await productAPI.delete(productId);
-      toast.success('Product deleted successfully');
-      fetchProducts();
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete product');
-    }
-  };
+  if (!confirmed) return;
+
+  try {
+    await axios.delete(`/api/products/${id}`);
+    toast.success('Product deleted successfully');
+    fetchProducts();
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Failed to delete product');
+  }
+};
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];

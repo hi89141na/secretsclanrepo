@@ -36,7 +36,7 @@ axiosInstance.interceptors.response.use(
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         if (!error.config?.silent) {
-          toast.error('Session expired. Please login again.');
+          // toast.error('Session expired. Please login again.');
         }
       } else if (!error.config?.silent) {
         const errorMessage = error.response.data?.message || 'An error occurred';

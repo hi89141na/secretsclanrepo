@@ -1,4 +1,4 @@
-import axiosInstance from './axios';
+﻿import axiosInstance from './axios';
 
 // Auth APIs
 export const authAPI = {
@@ -50,6 +50,11 @@ export const reviewAPI = {
 // Contact API
 export const contactAPI = {
   submit: (data, config) => axiosInstance.post('/contact', data, config),
+  getAll: (params, config) => axiosInstance.get('/contact', { ...config, params }),
+  getById: (id, config) => axiosInstance.get(`/contact/${id}`, config),
+  reply: (id, data, config) => axiosInstance.post(`/contact/${id}/reply`, data, config),
+  updateStatus: (id, status, config) => axiosInstance.patch(`/contact/${id}/status`, { status }, config),
+  delete: (id, config) => axiosInstance.delete(`/contact/${id}`, config),
 };
 
 // User APIs (Admin)

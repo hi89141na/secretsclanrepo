@@ -1,46 +1,80 @@
 const User = require('../models/User');
 const generateToken = require('../utils/generateToken');
-const { sendEmail, emailTemplates } = require('../services/emailService');
+const authService = require('../services/authService');
 
 const register = async (req, res) => {
   try {
     const { name, email, password, phone } = req.body;
 
-    const userExists = await User.findOne({ email });
-    if (userExists) {
+    if (!name || !email || !password) {
       return res.status(400).json({
         success: false,
-        message: 'User already exists'
+        message: 'Please provide name, email, and password'
       });
     }
 
-    const user = await User.create({ name, email, password, phone });
-
-    // Send welcome email
-    try {
-      const welcomeTemplate = emailTemplates.registration(user.name);
-      await sendEmail(user.email, welcomeTemplate.subject, welcomeTemplate.text, welcomeTemplate.html);
-      console.log(`Welcome email sent to ${user.email}`);
-    } catch (emailError) {
-      console.error('Failed to send welcome email:', emailError.message);
-      // Don't fail registration if email fails
-    }
+    const result = await authService.registerUser({ name, email, password, phone });
 
     res.status(201).json({
       success: true,
-      token: generateToken(user._id),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone
-      }
+      data: result.user,
+      message: result.message
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       success: false,
       message: error.message || 'Server error during registration'
+    });
+  }
+};
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.query;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: 'Verification token is required'
+      });
+    }
+
+    const result = await authService.verifyEmail(token);
+
+    res.status(200).json({
+      success: true,
+      user: result.user,
+      message: result.message
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Email verification failed'
+    });
+  }
+};
+
+const resendVerification = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
+
+    const result = await authService.resendVerificationEmail(email);
+
+    res.status(200).json({
+      success: true,
+      message: result.message
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Failed to resend verification email'
     });
   }
 };
@@ -56,41 +90,35 @@ const login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
-    }
-
-    const isPasswordMatch = await user.matchPassword(password);
-    
-    if (!isPasswordMatch) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid email or password'
-      });
-    }
+    const result = await authService.loginUser(email, password);
 
     res.json({
       success: true,
-      token: generateToken(user._id),
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        phone: user.phone
-      }
+      token: result.token,
+      user: result.user
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({
+    res.status(401).json({
       success: false,
       message: error.message || 'Server error during login'
     });
+  }
+};
+
+const googleCallback = async (req, res) => {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      return res.redirect(`${process.env.CLIENT_URL}/login?error=Google authentication failed`);
+    }
+
+    const token = generateToken(user._id);
+
+    res.redirect(`${process.env.CLIENT_URL}/auth/google/success?token=${token}`);
+  } catch (error) {
+    console.error('Google callback error:', error);
+    res.redirect(`${process.env.CLIENT_URL}/login?error=Authentication failed`);
   }
 };
 
@@ -132,7 +160,7 @@ const updateProfile = async (req, res) => {
     user.email = req.body.email || user.email;
     user.phone = req.body.phone || user.phone;
 
-    if (req.body.password) {
+    if (req.body.password && (user.authProvider === 'local' || user.authProvider === 'local+google')) {
       user.password = req.body.password;
     }
 
@@ -146,7 +174,9 @@ const updateProfile = async (req, res) => {
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,
-        phone: updatedUser.phone
+        phone: updatedUser.phone,
+        isVerified: updatedUser.isVerified,
+        authProvider: updatedUser.authProvider
       }
     });
   } catch (error) {
@@ -157,5 +187,12 @@ const updateProfile = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getProfile, updateProfile };
-
+module.exports = { 
+  register, 
+  verifyEmail, 
+  resendVerification,
+  login, 
+  googleCallback,
+  getProfile, 
+  updateProfile 
+};

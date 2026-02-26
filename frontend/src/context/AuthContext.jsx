@@ -43,22 +43,18 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (userData) => {
-    try {
-      const response = await authAPI.register(userData);
-      if (response.token && response.user) {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        setUser(response.user);
-        toast.success('Registration successful!');
-        return response;
-      }
-      throw new Error('Invalid response format');
-    } catch (error) {
-      toast.error(error.response?.data?.message || error.message || 'Registration failed');
-      throw error;
-    }
-  };
+const register = async (userData) => {
+  try {
+    const response = await authAPI.register(userData);
+    // Backend returns: { success, data, message }
+    // User is NOT logged in, they must verify email first
+    toast.success(response.message || 'Registration successful! Please check your email to verify your account.');
+    return response;
+  } catch (error) {
+    toast.error(error.response?.data?.message || error.message || 'Registration failed');
+    throw error;
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('token');

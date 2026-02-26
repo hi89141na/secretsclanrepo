@@ -4,16 +4,16 @@ import { categoryAPI } from '../../services/api';
 const ProductFilter = ({ onFilterChange, filters }) => {
   const [categories, setCategories] = useState([]);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await categoryAPI.getAll();
-      setCategories(Array.isArray(response) ? response : (response.data || []));
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
-  };
-
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await categoryAPI.getAll();
+        setCategories(Array.isArray(response) ? response : (response.data || []));
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+      }
+    };
+
     fetchCategories();
   }, []);
 
@@ -82,41 +82,41 @@ const ProductFilter = ({ onFilterChange, filters }) => {
             <input
               type="radio"
               name="price"
-              checked={isPriceRangeSelected('0', '25')}
-              onChange={() => handlePriceChange('0', '25')}
+              checked={isPriceRangeSelected('0', '250')}
+              onChange={() => handlePriceChange('0', '250')}
               className="mr-2 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-gray-700 dark:text-gray-300">Under Rs. 25</span>
+            <span className="text-gray-700 dark:text-gray-300">Under Rs. 250</span>
           </label>
           <label className="flex items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
             <input
               type="radio"
               name="price"
-              checked={isPriceRangeSelected('25', '50')}
-              onChange={() => handlePriceChange('25', '50')}
+              checked={isPriceRangeSelected('250', '500')}
+              onChange={() => handlePriceChange('250', '500')}
               className="mr-2 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-gray-700 dark:text-gray-300">Rs. 25 - Rs. 50</span>
+            <span className="text-gray-700 dark:text-gray-300">Rs. 250 - Rs. 500</span>
           </label>
           <label className="flex items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
             <input
               type="radio"
               name="price"
-              checked={isPriceRangeSelected('50', '100')}
-              onChange={() => handlePriceChange('50', '100')}
+              checked={isPriceRangeSelected('500', '1000')}
+              onChange={() => handlePriceChange('500', '1000')}
               className="mr-2 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-gray-700 dark:text-gray-300">Rs. 50 - Rs. 100</span>
+            <span className="text-gray-700 dark:text-gray-300">Rs. 500 - Rs. 1,000</span>
           </label>
           <label className="flex items-center cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 p-2 rounded transition-colors">
             <input
               type="radio"
               name="price"
-              checked={isPriceRangeSelected('100', '999999')}
-              onChange={() => handlePriceChange('100', '999999')}
+              checked={isPriceRangeSelected('1000', '999999')}
+              onChange={() => handlePriceChange('1000', '999999')}
               className="mr-2 text-indigo-600 focus:ring-indigo-500"
             />
-            <span className="text-gray-700 dark:text-gray-300">Over Rs. 100</span>
+            <span className="text-gray-700 dark:text-gray-300">Over Rs. 1,000</span>
           </label>
         </div>
       </div>

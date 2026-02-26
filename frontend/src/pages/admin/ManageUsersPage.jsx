@@ -1,8 +1,11 @@
+import useConfirm from '../../hooks/useConfirm';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 import React, { useState, useEffect } from 'react';
 import { userAPI } from '../../services/api';
 import { toast } from 'react-toastify';
 
 const ManageUsersPage = () => {
+  const { showConfirm, confirmState, handleConfirm, handleCancel } = useConfirm();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -41,17 +44,35 @@ const ManageUsersPage = () => {
     setShowModal(true);
   };
 
-  const handleDelete = async (userId) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) return;
+ const handleDelete = async (id) => {
+  const confirmed = await showConfirm({
+    title: 'Delete User?',
+    message: 'Are you sure you want to delete this user? This action cannot be undone.',
+    confirmText: 'Delete',
+    cancelText: 'Cancel',
+    variant: 'danger',
+  });
 
-    try {
-      await userAPI.delete(userId);
-      toast.success('User deleted successfully');
-      fetchUsers();
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete user');
-    }
-  };
+  if (!confirmed) return;
+
+  try {
+    await axios.delete(`/api/users/${id}`);
+    toast.success('User deleted successfully');
+    fetchUsers();
+  } catch (error) {
+    toast.error(error.response?.data?.message || 'Failed to delete user');
+  }
+  return <ConfirmDialog
+  isOpen={confirmState.isOpen}
+  onClose={handleCancel}
+  onConfirm={handleConfirm}
+  title={confirmState.title}
+  message={confirmState.message}
+  confirmText={confirmState.confirmText}
+  cancelText={confirmState.cancelText}
+  variant={confirmState.variant}
+/>
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();

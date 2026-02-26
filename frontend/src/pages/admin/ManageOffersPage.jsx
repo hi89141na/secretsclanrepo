@@ -116,7 +116,7 @@ const ManageOffersPage = () => {
   const handleToggle = async (offer) => {
     try {
       await offerAPI.update(offer._id, { isActive: !offer.isActive });
-      toast.success(Offer  successfully);
+      toast.success(`Offer ${offer.isActive ? "disabled" : "enabled"} successfully`);
       fetchOffers();
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to toggle offer');
@@ -178,98 +178,100 @@ const ManageOffersPage = () => {
     if (!startDate && !endDate) return 'N/A';
     const start = startDate ? new Date(startDate).toLocaleDateString() : 'N/A';
     const end = endDate ? new Date(endDate).toLocaleDateString() : 'N/A';
-    return ${start} - ;
+    return `${start} - ${end}`;
   };
 
   if (loading) {
     return (
-      <div className=\"flex justify-center items-center min-h-screen\">
-        <div className=\"animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600\"></div>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-600"></div>
       </div>
     );
   }
 
   return (
-    <div className=\"container mx-auto px-4 py-8\">
-      <div className=\"bg-white rounded-lg shadow-md p-6\">
-        <div className=\"flex justify-between items-center mb-6\">
-          <h1 className=\"text-3xl font-bold text-gray-900\">Manage Offers</h1>
+    <div className="container mx-auto px-4 py-8">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold text-gray-900">Manage Offers</h1>
           <button
             onClick={handleAdd}
-            className=\"bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded\"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
           >
             Add Offer
           </button>
         </div>
 
-        <div className=\"overflow-x-auto\">
-          <table className=\"min-w-full divide-y divide-gray-200\">
-            <thead className=\"bg-gray-50\">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Title
                 </th>
-                <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Type
                 </th>
-                <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Value
                 </th>
-                <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Date Range
                 </th>
-                <th className=\"px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Status
                 </th>
-                <th className=\"px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider\">
+                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className=\"bg-white divide-y divide-gray-200\">
+            <tbody className="bg-white divide-y divide-gray-200">
               {offers && offers.length > 0 ? (
                 offers.map((offer) => (
-                  <tr key={offer._id} className=\"hover:bg-gray-50\">
-                    <td className=\"px-6 py-4\">
-                      <div className=\"text-sm font-medium text-gray-900\">{offer.title}</div>
-                      <div className=\"text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs\">
+                  <tr key={offer._id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-medium text-gray-900">{offer.title}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400 truncate max-w-xs">
                         {offer.description}
                       </div>
                     </td>
-                    <td className=\"px-6 py-4 whitespace-nowrap\">
-                      <span className=\"px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200\">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200">
                         {offer.discountType}
                       </span>
                     </td>
-                    <td className=\"px-6 py-4 whitespace-nowrap text-sm text-gray-900\">
-                      {offer.discountType === 'percentage' ? ${offer.discountValue}% : \ready\);');{offer.discountValue}}
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {offer.discountType === 'percentage' ? `${offer.discountValue}%` : `$${offer.discountValue}`}
                     </td>
-                    <td className=\"px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400\">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
                       {formatDateRange(offer.startDate, offer.endDate)}
                     </td>
-                    <td className=\"px-6 py-4 whitespace-nowrap\">
+                    <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={px-2 inline-flex text-xs leading-5 font-semibold rounded-full }
+                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                          offer.isActive ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200' : 'bg-gray-100 text-gray-800'
+                        }`}
                       >
                         {offer.isActive ? 'Active' : 'Inactive'}
                       </span>
                     </td>
-                    <td className=\"px-6 py-4 whitespace-nowrap text-right text-sm font-medium\">
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button
                         onClick={() => handleEdit(offer)}
-                        className=\"text-indigo-600 hover:text-indigo-900 mr-4\"
+                        className="text-indigo-600 hover:text-indigo-900 mr-4"
                       >
                         Edit
                       </button>
                       <button
                         onClick={() => handleToggle(offer)}
-                        className=\"text-yellow-600 hover:text-yellow-900 mr-4\"
+                        className="text-yellow-600 hover:text-yellow-900 mr-4"
                       >
                         {offer.isActive ? 'Deactivate' : 'Activate'}
                       </button>
                       <button
                         onClick={() => handleDelete(offer._id)}
-                        className=\"text-red-600 hover:text-red-900\"
+                        className="text-red-600 hover:text-red-900"
                       >
                         Delete
                       </button>
@@ -278,7 +280,7 @@ const ManageOffersPage = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan=\"6\" className=\"text-center py-8 text-gray-500 dark:text-gray-400\">
+                  <td colSpan="6" className="text-center py-8 text-gray-500 dark:text-gray-400">
                     No offers found
                   </td>
                 </tr>
@@ -289,194 +291,194 @@ const ManageOffersPage = () => {
       </div>
 
       {showModal && (
-        <div className=\"fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-80 overflow-y-auto h-full w-full z-50\">
-          <div className=\"relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white mb-10\">
-            <div className=\"mt-3\">
-              <h3 className=\"text-lg leading-6 font-medium text-gray-900 mb-4\">
+        <div className="fixed inset-0 bg-gray-600 dark:bg-gray-900 bg-opacity-50 dark:bg-opacity-80 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white mb-10">
+            <div className="mt-3">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
                 {selectedOffer ? 'Edit Offer' : 'Add Offer'}
               </h3>
               <form onSubmit={handleSubmit}>
-                <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">
-                  <div className=\"md:col-span-2\">
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="md:col-span-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Title
                     </label>
                     <input
-                      type=\"text\"
-                      name=\"title\"
+                      type="text"
+                      name="title"
                       value={formData.title}
                       onChange={handleInputChange}
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
-                  <div className=\"md:col-span-2\">
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                  <div className="md:col-span-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Description
                     </label>
                     <textarea
-                      name=\"description\"
+                      name="description"
                       value={formData.description}
                       onChange={handleInputChange}
-                      rows=\"3\"
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      rows="3"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Discount Type
                     </label>
                     <select
-                      name=\"discountType\"
+                      name="discountType"
                       value={formData.discountType}
                       onChange={handleInputChange}
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     >
-                      <option value=\"percentage\">Percentage</option>
-                      <option value=\"fixed\">Fixed</option>
+                      <option value="percentage">Percentage</option>
+                      <option value="fixed">Fixed</option>
                     </select>
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Discount Value
                     </label>
                     <input
-                      type=\"number\"
-                      name=\"discountValue\"
+                      type="number"
+                      name="discountValue"
                       value={formData.discountValue}
                       onChange={handleInputChange}
-                      step=\"0.01\"
-                      min=\"0\"
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      step="0.01"
+                      min="0"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                       required
                     />
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Start Date
                     </label>
                     <input
-                      type=\"datetime-local\"
-                      name=\"startDate\"
+                      type="datetime-local"
+                      name="startDate"
                       value={formData.startDate}
                       onChange={handleInputChange}
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       End Date
                     </label>
                     <input
-                      type=\"datetime-local\"
-                      name=\"endDate\"
+                      type="datetime-local"
+                      name="endDate"
                       value={formData.endDate}
                       onChange={handleInputChange}
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
-                      Min Purchase Amount (\$) <span className=\"text-gray-500 dark:text-gray-400 font-normal text-xs\">(Optional)</span>
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                      Min Purchase Amount ($) <span className="text-gray-500 dark:text-gray-400 font-normal text-xs">(Optional)</span>
                     </label>
                     <input
-                      type=\"number\"
-                      name=\"minPurchaseAmount\"
+                      type="number"
+                      name="minPurchaseAmount"
                       value={formData.minPurchaseAmount}
                       onChange={handleInputChange}
-                      step=\"0.01\"
-                      min=\"0\"
-                      placeholder=\"Leave empty if no minimum\"
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      step="0.01"
+                      min="0"
+                      placeholder="Leave empty if no minimum"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
                   <div>
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
-                      Max Discount Amount (\$) <span className=\"text-gray-500 dark:text-gray-400 font-normal text-xs\">(Optional)</span>
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
+                      Max Discount Amount ($) <span className="text-gray-500 dark:text-gray-400 font-normal text-xs">(Optional)</span>
                     </label>
                     <input
-                      type=\"number\"
-                      name=\"maxDiscountAmount\"
+                      type="number"
+                      name="maxDiscountAmount"
                       value={formData.maxDiscountAmount}
                       onChange={handleInputChange}
-                      step=\"0.01\"
-                      min=\"0\"
-                      placeholder=\"Leave empty if no maximum\"
-                      className=\"shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline\"
+                      step="0.01"
+                      min="0"
+                      placeholder="Leave empty if no maximum"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-gray-300 leading-tight focus:outline-none focus:shadow-outline"
                     />
                   </div>
 
-                  <div className=\"md:col-span-2\">
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                  <div className="md:col-span-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Applicable Products
                     </label>
-                    <div className=\"border rounded p-3 max-h-40 overflow-y-auto bg-gray-50\">
+                    <div className="border rounded p-3 max-h-40 overflow-y-auto bg-gray-50">
                       {products && products.length > 0 ? (
                         products.map((product) => (
-                          <div key={product._id} className=\"flex items-center mb-2\">
+                          <div key={product._id} className="flex items-center mb-2">
                             <input
-                              type=\"checkbox\"
+                              type="checkbox"
                               checked={formData.applicableProducts.includes(product._id)}
                               onChange={() => handleProductToggle(product._id)}
-                              className=\"h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded\"
+                              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                             />
-                            <label className=\"ml-2 block text-sm text-gray-900\">
+                            <label className="ml-2 block text-sm text-gray-900">
                               {product.name}
                             </label>
                           </div>
                         ))
                       ) : (
-                        <p className=\"text-sm text-gray-500 dark:text-gray-400\">No products available</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">No products available</p>
                       )}
                     </div>
                   </div>
 
-                  <div className=\"md:col-span-2\">
-                    <label className=\"block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2\">
+                  <div className="md:col-span-2">
+                    <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                       Applicable Categories
                     </label>
-                    <div className=\"border rounded p-3 max-h-40 overflow-y-auto bg-gray-50\">
+                    <div className="border rounded p-3 max-h-40 overflow-y-auto bg-gray-50">
                       {categories && categories.length > 0 ? (
                         categories.map((category) => (
-                          <div key={category._id} className=\"flex items-center mb-2\">
+                          <div key={category._id} className="flex items-center mb-2">
                             <input
-                              type=\"checkbox\"
+                              type="checkbox"
                               checked={formData.applicableCategories.includes(category._id)}
                               onChange={() => handleCategoryToggle(category._id)}
-                              className=\"h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded\"
+                              className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                             />
-                            <label className=\"ml-2 block text-sm text-gray-900\">
+                            <label className="ml-2 block text-sm text-gray-900">
                               {category.name}
                             </label>
                           </div>
                         ))
                       ) : (
-                        <p className=\"text-sm text-gray-500 dark:text-gray-400\">No categories available</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">No categories available</p>
                       )}
                     </div>
                   </div>
                 </div>
 
-                <div className=\"flex items-center justify-end space-x-2 mt-6\">
+                <div className="flex items-center justify-end space-x-2 mt-6">
                   <button
-                    type=\"button\"
+                    type="button"
                     onClick={() => setShowModal(false)}
-                    className=\"bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline\"
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
                     Cancel
                   </button>
                   <button
-                    type=\"submit\"
-                    className=\"bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline\"
+                    type="submit"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   >
                     {selectedOffer ? 'Update Offer' : 'Create Offer'}
                   </button>
@@ -491,4 +493,3 @@ const ManageOffersPage = () => {
 };
 
 export default ManageOffersPage;
-

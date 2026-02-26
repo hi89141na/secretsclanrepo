@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken');
+﻿const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const protect = async (req, res, next) => {
@@ -11,21 +11,25 @@ const protect = async (req, res, next) => {
       req.user = await User.findById(decoded.id).select('-password');
 
       if (!req.user) {
-        res.status(401);
-        throw new Error('Not authorized, user not found');
+        return res.status(401).json({
+          success: false,
+          message: 'Not authorized, user not found'
+        });
       }
 
       next();
     } catch (error) {
-      console.error(error);
-      res.status(401);
-      throw new Error('Not authorized, token failed');
+      console.error('Token verification error:', error.message);
+      return res.status(401).json({
+        success: false,
+        message: 'Not authorized, token failed'
+      });
     }
-  }
-
-  if (!token) {
-    res.status(401);
-    throw new Error('Not authorized, no token');
+  } else {
+    return res.status(401).json({
+      success: false,
+      message: 'Not authorized, no token'
+    });
   }
 };
 
@@ -33,8 +37,10 @@ const admin = (req, res, next) => {
   if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    res.status(403);
-    throw new Error('Not authorized as admin');
+    return res.status(403).json({
+      success: false,
+      message: 'Not authorized as admin'
+    });
   }
 };
 

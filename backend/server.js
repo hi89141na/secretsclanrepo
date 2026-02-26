@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
+const passport = require('passport');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 
@@ -11,9 +12,13 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(express.json({ limit: '10mb' })); // Increase limit for base64 images if needed
+app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors());
+
+// Initialize Passport
+app.use(passport.initialize());
+require('./config/passport');
 
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -42,4 +47,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log('Server running in ' + process.env.NODE_ENV + ' mode on port ' + PORT);
 });
-
