@@ -394,7 +394,7 @@ const AdminDashboardPage = () => {
         <StatCard
           icon={DollarSign}
           title="Total Revenue"
-          value={`$${stats.totalRevenue.toLocaleString()}`}
+          value={`Rs. ${stats.totalRevenue.toLocaleString()}`}
           change={stats.revenueChange}
           color="bg-gradient-to-br from-green-500 to-emerald-600"
         />
