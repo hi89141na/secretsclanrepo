@@ -37,49 +37,64 @@ const HomePage = () => {
   return (
     <div className="overflow-hidden">
       <OfferBanner />
-      <motion.section 
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 dark:from-indigo-900 dark:via-purple-900 dark:to-pink-800 text-white py-24 md:py-32 overflow-hidden">
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
-        </div>
-        
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <motion.h1 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-pink-200">SecretsClan</span>
-          </motion.h1>
-          
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-2xl mb-10 text-indigo-100 font-light max-w-2xl mx-auto">
-            Discover amazing products at great prices
-          </motion.p>
-          
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.6 }}>
-            <Link to="/products">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                className="relative px-8 py-4 text-lg font-semibold bg-white text-indigo-600 rounded-full shadow-2xl hover:shadow-indigo-300 transition-all duration-300 overflow-hidden group">
-                <span className="relative z-10">Shop Now</span>
-                <span className="absolute inset-0 bg-gradient-to-r from-yellow-200 to-pink-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
-              </motion.button>
-            </Link>
-          </motion.div>
-        </div>
-      </motion.section>
+   <motion.section 
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, ease: 'easeOut' }}
+  className="relative bg-cover bg-center bg-no-repeat text-white py-24 md:py-32 lg:py-40 overflow-hidden"
+  style={{
+    backgroundImage: 'url(/hero_img.png)',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundAttachment: 'fixed'
+  }}>
+  
+  {/* Dark overlay for text readability */}
+  <div className="absolute inset-0 bg-black/50 dark:bg-black/60"></div>
+  
+  {/* Gradient overlay for better visual effect */}
+  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/40"></div>
+  
+  {/* Animated blob shapes */}
+  <div className="absolute inset-0 opacity-10">
+    <div className="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse"></div>
+    <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+  </div>
+  
+  {/* Content */}
+  <div className="container mx-auto px-4 text-center relative z-10">
+    <motion.h1 
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.2 }}
+      className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+      Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 to-pink-200">SecretsClan</span>
+    </motion.h1>
+    
+    <motion.p 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      className="text-base sm:text-lg md:text-xl lg:text-2xl mb-10 text-gray-100 font-light max-w-2xl mx-auto">
+      Discover amazing products at great prices
+    </motion.p>
+    
+    <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay: 0.6 }}>
+      <Link to="/products">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.98 }}
+          className="relative px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold bg-white text-indigo-600 rounded-full shadow-2xl hover:shadow-indigo-300 transition-all duration-300 overflow-hidden group">
+          <span className="relative z-10">Shop Now</span>
+          <span className="absolute inset-0 bg-gradient-to-r from-yellow-200 to-pink-200 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+        </motion.button>
+      </Link>
+    </motion.div>
+  </div>
+</motion.section>
 
       <motion.section 
         initial={{ opacity: 0 }}
