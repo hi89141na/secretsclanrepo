@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -8,8 +8,8 @@ const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
 const { startScheduler } = require('./utils/offerScheduler');
 
 dotenv.config();
-connectDB();
 
+// Initialize Express app
 const app = express();
 
 // Middleware
@@ -25,11 +25,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Start offer scheduler
-startScheduler();
-
-app.get('/api', (req, res) => {
-  res.json({ message: 'API is running' });
+// Health check endpoint (available before DB connection)
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'Server is running', timestamp: new Date() });
 });
 
 // API Routes
@@ -44,10 +42,39 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/offers', require('./routes/offerRoutes'));
 app.use('/api/email', require('./routes/emailRoutes'));
 
+app.get('/api', (req, res) => {
+  res.json({ message: 'API is running' });
+});
+
 app.use(notFound);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log('Server running in ' + process.env.NODE_ENV + ' mode on port ' + PORT);
+
+// Initialize and start server
+const startServer = async () => {
+  try {
+    // Connect to database
+    console.log('Connecting to MongoDB...');
+    await connectDB();
+    
+    // Start scheduler after DB connection
+    console.log('Starting offer scheduler...');
+    startScheduler();
+    
+    // Start Express server
+    app.listen(PORT, () => {
+      console.log(`? Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 });

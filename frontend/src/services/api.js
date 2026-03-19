@@ -6,6 +6,10 @@ export const authAPI = {
   login: (data, config) => axiosInstance.post('/auth/login', data, config),
   getProfile: (config) => axiosInstance.get('/auth/profile', config),
   updateProfile: (data, config) => axiosInstance.put('/auth/profile', data, config),
+  // Password Reset
+  forgotPassword: (data) => axiosInstance.post('/auth/forgot-password', data),
+  validateResetToken: (data) => axiosInstance.post('/auth/validate-reset-token', data),
+  resetPassword: (data) => axiosInstance.post('/auth/reset-password', data),
 };
 
 // Product APIs
@@ -98,3 +102,4 @@ export const uploadAPI = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
 };
+

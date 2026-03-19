@@ -50,13 +50,23 @@ const LoginPage = () => {
             required
           />
           
-          <Input
-            label="Password"
-            type="password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-            required
-          />
+          <div>
+            <Input
+              label="Password"
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              required
+            />
+            <div className="mt-2 text-right">
+              <Link 
+                to="/forgot-password" 
+                className="text-sm font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition-colors"
+              >
+                Forgot password?
+              </Link>
+            </div>
+          </div>
           
           <Button type="submit" fullWidth disabled={loading}>
             {loading ? 'Signing in...' : 'Sign in'}

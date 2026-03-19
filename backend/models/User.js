@@ -1,4 +1,5 @@
-﻿const mongoose = require('mongoose');
+﻿
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
@@ -51,6 +52,19 @@ const userSchema = new mongoose.Schema({
   googleId: {
     type: String,
     default: null
+  },
+  // Password Reset Fields
+  passwordResetToken: {
+    type: String,
+    default: null
+  },
+  passwordResetExpiry: {
+    type: Date,
+    default: null
+  },
+  passwordResetUsed: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true

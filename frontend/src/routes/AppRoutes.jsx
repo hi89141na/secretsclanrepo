@@ -25,10 +25,13 @@ import ManageUsersPage from "../pages/admin/ManageUsersPage";
 import ManageContactPage from "../pages/admin/ManageContactPage";
 import ManageOffersPage from "../pages/admin/ManageOffersPage";
 import SendEmailPage from "../pages/admin/SendEmailPage";
+import ForgotPasswordPage from "../pages/public/ForgotPasswordPage";
+import ResetPasswordPage from "../pages/public/ResetPasswordPage";
 
 function AppRoutes() {
   return (
     <Routes>
+      
       <Route path="/" element={<HomePage />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/products" element={<ProductsPage />} />
@@ -38,6 +41,8 @@ function AppRoutes() {
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/verify-email" element={<VerifyEmailPage />} />
+      <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+      <Route path="/reset-password" element={<ResetPasswordPage />} />
       <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
       <Route path="/dashboard" element={<ProtectedRoute><DashboardPage /></ProtectedRoute>} />
       <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
