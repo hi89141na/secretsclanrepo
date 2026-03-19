@@ -42,7 +42,7 @@ const createOrder = async (req, res) => {
     // Prepare shipping address string
     const shippingAddressString = typeof shippingAddress === 'string' 
       ? shippingAddress 
-      : `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.state} ${shippingAddress.zipCode}, ${shippingAddress.country}`;
+      : `${shippingAddress.address}, ${shippingAddress.city}, ${shippingAddress.province} ${shippingAddress.zipCode}, ${shippingAddress.country}`;
 
     const order = await Order.create({
       user: req.user._id,

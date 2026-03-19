@@ -70,32 +70,32 @@ const OrderDetailPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header */}
-      <div className="mb-6">
-        <Link to="/orders" className="text-indigo-600 hover:text-indigo-700 mb-2 inline-block">
-          ← Back to Orders
-        </Link>
-        <div className="flex flex-wrap justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold">Order #{order._id?.slice(-8)}</h1>
-            <p className="text-gray-600">
-              Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </p>
+     {/* Header */}
+        <div className="mb-6">
+          <Link to="/orders" className="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 mb-2 inline-block">
+            ← Back to Orders
+          </Link>
+          <div className="flex flex-wrap justify-between items-start">
+            <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Order #{order._id?.slice(-8)}</h1>
+          <p className="text-gray-600 dark:text-gray-400">
+            Placed on {new Date(order.createdAt).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit'
+            })}
+          </p>
+            </div>
+            <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium ${getStatusColor(order.orderStatus)}`}>
+          {order.orderStatus?.charAt(0).toUpperCase() + order.orderStatus?.slice(1)}
+            </span>
           </div>
-          <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium Rs. ${getStatusColor(order.orderStatus)}`}>
-            {order.orderStatus?.charAt(0).toUpperCase() + order.orderStatus?.slice(1)}
-          </span>
         </div>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Order Items */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Order Items */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-lg shadow-md p-6">
             <h2 className="text-xl font-semibold mb-4">Order Items</h2>

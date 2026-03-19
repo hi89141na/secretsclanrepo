@@ -1,10 +1,11 @@
-const express = require('express');
+﻿const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
 const connectDB = require('./config/db');
 const { notFound, errorHandler } = require('./middlewares/errorMiddleware');
+const { startScheduler } = require('./utils/offerScheduler');
 
 dotenv.config();
 connectDB();
@@ -23,6 +24,9 @@ require('./config/passport');
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Start offer scheduler
+startScheduler();
 
 app.get('/api', (req, res) => {
   res.json({ message: 'API is running' });

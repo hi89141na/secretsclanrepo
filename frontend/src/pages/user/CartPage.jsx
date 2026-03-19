@@ -5,7 +5,7 @@ import Button from '../../components/common/Button';
 import { toast } from 'react-toastify';
 
 const CartPage = () => {
-  const { cart, removeFromCart, updateQuantity, clearCart, getCartTotal } = useCart();
+  const { cart, removeFromCart, updateQuantity, clearCart, getCartTotal, getEffectivePrice } = useCart();
   const navigate = useNavigate();
 
   const handleQuantityChange = (productId, newQuantity) => {
@@ -29,34 +29,35 @@ const CartPage = () => {
   if (cart.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
-        <div className="bg-white rounded-lg shadow-md p-8 text-center">
-          <svg
-            className="mx-auto h-16 w-16 text-gray-400 mb-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-            />
-          </svg>
-          <h3 className="text-xl font-medium text-gray-900 mb-2">Your cart is empty</h3>
-          <p className="text-gray-500 mb-6">Add some products to get started!</p>
-          <Link to="/products">
-            <Button>Browse Products</Button>
-          </Link>
-        </div>
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">Shopping Cart</h1>
+      <div className="bg-white dark:bg-gray-900 rounded-lg shadow-md p-8 text-center">
+        <svg
+        className="mx-auto h-16 w-16 text-gray-400 dark:text-gray-500 mb-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+        />
+        </svg>
+        <h3 className="text-xl font-medium text-gray-900 dark:text-white mb-2">Your cart is empty</h3>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">Add some products to get started!</p>
+        <Link to="/products">
+        <Button>Browse Products</Button>
+        </Link>
+      </div>
       </div>
     );
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">Shopping Cart</h1>
+       
       
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Cart Items */}
@@ -123,10 +124,13 @@ const CartPage = () => {
                     {/* Price */}
                     <div className="text-right">
                       <p className="text-2xl font-bold text-indigo-600">
-                        Rs.{(item.price * item.quantity).toFixed(2)}
+                        Rs.{(getEffectivePrice(item) * item.quantity).toFixed(2)}
                       </p>
                       <p className="text-sm text-gray-500">
-                        Rs.{item.price.toFixed(2)} each
+                        {getEffectivePrice(item) < item.price && (
+                          <span className="line-through text-gray-400 mr-2">Rs.{item.price.toFixed(2)}</span>
+                        )}
+                        Rs.{getEffectivePrice(item).toFixed(2)} each
                       </p>
                     </div>
                   </div>

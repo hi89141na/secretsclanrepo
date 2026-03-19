@@ -1,19 +1,16 @@
-import { createContext, useState, useEffect, useRef } from 'react';
+﻿import { createContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
-  const toastShownRef = useRef(false);
-
-  useEffect(() => {
+  // Initialize cart from localStorage directly to avoid race condition
+  const [cart, setCart] = useState(() => {
     const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      setCart(JSON.parse(savedCart));
-    }
-  }, []);
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
 
+  // Save to localStorage whenever cart changes
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
@@ -55,8 +52,24 @@ export const CartProvider = ({ children }) => {
     localStorage.removeItem('cart');
   };
 
+  const getEffectivePrice = (item) => {
+    if (item.discountedPrice !== undefined && item.appliedOffer) {
+      return item.discountedPrice;
+    }
+    if (item.salePrice && item.salePrice < item.price) {
+      const now = new Date();
+      const saleStart = item.saleStartDate ? new Date(item.saleStartDate) : null;
+      const saleEnd = item.saleEndDate ? new Date(item.saleEndDate) : null;
+      const isOnSale = (!saleStart || now >= saleStart) && (!saleEnd || now <= saleEnd);
+      if (isOnSale) {
+        return item.salePrice;
+      }
+    }
+    return item.price;
+  };
+
   const getCartTotal = () => {
-    return cart.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cart.reduce((total, item) => total + getEffectivePrice(item) * item.quantity, 0);
   };
 
   const getCartCount = () => {
@@ -64,7 +77,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getCartCount }}>
+    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, getCartTotal, getCartCount, getEffectivePrice }}>
       {children}
     </CartContext.Provider>
   );

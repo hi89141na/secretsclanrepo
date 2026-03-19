@@ -199,11 +199,13 @@ const AdminDashboardPage = () => {
     orders.forEach((order) => {
       if (!order.isCancelled && order.orderItems) {
         order.orderItems.forEach((item) => {
-          const categoryId = productCategoryMap[item.productId];
-          if (categoryId && categorySales[categoryId]) {
-            categorySales[categoryId].value += (item.price * item.quantity) || 0;
-          }
-        });
+  // Normalize productId (handle both object and string cases)
+  const productId = typeof item.productId === 'object' ? item.productId._id : item.productId;
+  const categoryId = productCategoryMap[productId];
+  if (categoryId && categorySales[categoryId]) {
+    categorySales[categoryId].value += (item.price * item.quantity) || 0;
+  }
+});
       }
     });
 
@@ -237,13 +239,16 @@ const AdminDashboardPage = () => {
     orders.forEach((order) => {
       if (!order.isCancelled && order.orderItems) {
         order.orderItems.forEach((item) => {
-          if (productStats[item.productId]) {
-            productStats[item.productId].sales += item.quantity || 0;
-            productStats[item.productId].revenue += (item.price * item.quantity) || 0;
+          // Normalize productId (handle both object and string cases)
+          const productId = typeof item.productId === 'object' ? item.productId._id : item.productId;
+          if (productStats[productId]) {
+            productStats[productId].sales += item.quantity || 0;
+            productStats[productId].revenue += (item.price * item.quantity) || 0;
           }
         });
       }
     });
+
 
     // Convert to array and get top 5
     const topList = Object.values(productStats)
@@ -543,7 +548,7 @@ const AdminDashboardPage = () => {
                 </div>
                 <div className="text-right">
                   <p className="font-bold text-gray-900 dark:text-white">
-                    ${product.revenue.toLocaleString()}
+                    Rs.{product.revenue.toLocaleString()}
                   </p>
                 </div>
               </div>

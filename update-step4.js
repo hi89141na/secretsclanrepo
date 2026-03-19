@@ -1,4 +1,8 @@
-import axiosInstance from './axios';
+﻿const fs = require('fs');
+
+console.log('🔧 Step 4/10: Updating frontend API service...');
+
+const apiContent = String.raw`import axiosInstance from './axios';
 
 // Auth APIs
 export const authAPI = {
@@ -51,10 +55,10 @@ export const reviewAPI = {
 export const contactAPI = {
   submit: (data, config) => axiosInstance.post('/contact', data, config),
   getAll: (params, config) => axiosInstance.get('/contact', { ...config, params }),
-  getById: (id, config) => axiosInstance.get(`/contact/${id}`, config),
-  reply: (id, data, config) => axiosInstance.post(`/contact/${id}/reply`, data, config),
-  updateStatus: (id, status, config) => axiosInstance.patch(`/contact/${id}/status`, { status }, config),
-  delete: (id, config) => axiosInstance.delete(`/contact/${id}`, config),
+  getById: (id, config) => axiosInstance.get(` + '`/contact/${id}`' + `, config),
+  reply: (id, data, config) => axiosInstance.post(` + '`/contact/${id}/reply`' + `, data, config),
+  updateStatus: (id, status, config) => axiosInstance.patch(` + '`/contact/${id}/status`' + `, { status }, config),
+  delete: (id, config) => axiosInstance.delete(` + '`/contact/${id}`' + `, config),
 };
 
 // User APIs (Admin)
@@ -70,7 +74,7 @@ export const offerAPI = {
   getAll: (config) => axiosInstance.get('/offers', config),
   getActive: (config) => axiosInstance.get('/offers/active', config),
   getStoreWide: (config) => axiosInstance.get('/offers/store-wide', config),
-  getOfferProducts: (id, config) => axiosInstance.get(`/offers/${id}/products`, config),
+  getOfferProducts: (id, config) => axiosInstance.get(` + '`/offers/${id}/products`' + `, config),
   getById: (id, config) => axiosInstance.get("/offers/" + id, config),
   create: (data, config) => axiosInstance.post('/offers', data, config),
   update: (id, data, config) => axiosInstance.put("/offers/" + id, data, config),
@@ -98,3 +102,7 @@ export const uploadAPI = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
 };
+`;
+
+fs.writeFileSync('frontend/src/services/api.js', apiContent, 'utf8');
+console.log('✅ Step 4/10: Updated frontend/src/services/api.js\n');

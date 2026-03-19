@@ -4,6 +4,7 @@ import ProductGrid from '../../components/product/ProductGrid';
 import Loader from '../../components/common/Loader';
 import { Link } from 'react-router-dom';
 import Button from '../../components/common/Button';
+import OfferBanner from '../../components/common/OfferBanner';
 import { motion } from 'framer-motion';
 
 const HomePage = () => {
@@ -35,6 +36,7 @@ const HomePage = () => {
 
   return (
     <div className="overflow-hidden">
+      <OfferBanner />
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -126,7 +128,7 @@ const HomePage = () => {
           </p>
         </motion.div>
         
-        <ProductGrid products={featured} />
+        <ProductGrid products={featured} showOfferPrice={true} />
         
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
@@ -155,8 +157,8 @@ const CategoryCard = ({ category, index }) => {
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}>
-      <Link to={`/products?category=--version{category._id}`}>
+      transition={{ duration: 0.3, delay: index * 0.1 }}>
+      <Link to={`/products?category=${category._id}`}>
         <motion.div
           whileHover={{ y: -8, scale: 1.02 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}

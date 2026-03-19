@@ -12,16 +12,16 @@ const ReviewList = ({ reviews }) => {
   return (
     <div className="space-y-4">
       {reviews.map((review) => (
-        <div key={review._id} className="border-b pb-4">
+        <div key={review._id} className="border-b dark:border-gray-600 pb-4">
           <div className="flex items-center justify-between mb-2">
             <div>
-              <span className="font-semibold">{review.user?.name || 'Anonymous'}</span>
+              <span className="font-semibold text-gray-900 dark:text-white">{review.user?.name || 'Anonymous'}</span>
               <div className="flex items-center mt-1">
                 {[...Array(5)].map((_, i) => (
                   <svg
                     key={i}
                     className={`h-4 w-4 ${
-                      i < review.rating ? 'text-yellow-400' : 'text-gray-300'
+                      i < review.rating ? 'text-yellow-400' : 'text-gray-300 dark:text-gray-600'
                     }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -31,11 +31,11 @@ const ReviewList = ({ reviews }) => {
                 ))}
               </div>
             </div>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
               {new Date(review.createdAt).toLocaleDateString()}
             </span>
           </div>
-          <p className="text-gray-700">{review.comment}</p>
+          <p className="text-gray-700 dark:text-gray-300">{review.comment}</p>
         </div>
       ))}
     </div>

@@ -82,12 +82,12 @@ const ProfilePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">My Profile</h1>
+      <h1 className="text-3xl font-bold mb-6 dark:text-white">My Profile</h1>
       
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Profile Information */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Profile Information</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">Profile Information</h2>
           <form onSubmit={handleProfileUpdate} className="space-y-4">
             <Input
               label="Full Name"
@@ -112,14 +112,14 @@ const ProfilePage = () => {
             />
             
             <div className="mb-4">
-              <label className="block text-gray-700 text-sm font-bold mb-2">
+              <label className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">
                 Address
               </label>
               <textarea
                 value={formData.address}
                 onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
                 required
               />
             </div>
@@ -131,8 +131,8 @@ const ProfilePage = () => {
         </div>
 
         {/* Change Password */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Change Password</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">Change Password</h2>
           <form onSubmit={handlePasswordChange} className="space-y-4">
             <Input
               label="Current Password"
@@ -165,22 +165,22 @@ const ProfilePage = () => {
         </div>
 
         {/* Account Information */}
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Account Information</h2>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-semibold mb-4 dark:text-white">Account Information</h2>
           <div className="space-y-3">
-            <div className="flex justify-between py-2 border-b">
-              <span className="font-medium text-gray-600">Account Type:</span>
-              <span className="text-gray-800 capitalize">{user?.role || 'user'}</span>
+            <div className="flex justify-between py-2 border-b dark:border-gray-700">
+              <span className="font-medium text-gray-600 dark:text-gray-300">Account Type:</span>
+              <span className="text-gray-800 dark:text-gray-200 capitalize">{user?.role || 'user'}</span>
             </div>
-            <div className="flex justify-between py-2 border-b">
-              <span className="font-medium text-gray-600">Member Since:</span>
-              <span className="text-gray-800">
+            <div className="flex justify-between py-2 border-b dark:border-gray-700">
+              <span className="font-medium text-gray-600 dark:text-gray-300">Member Since:</span>
+              <span className="text-gray-800 dark:text-gray-200">
                 {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
               </span>
             </div>
-            <div className="flex justify-between py-2 border-b">
-              <span className="font-medium text-gray-600">Email Verified:</span>
-              <span className="text-gray-800">{user?.isEmailVerified ? 'Yes' : 'No'}</span>
+            <div className="flex justify-between py-2 border-b dark:border-gray-700">
+              <span className="font-medium text-gray-600 dark:text-gray-300">Email Verified:</span>
+              <span className="text-gray-800 dark:text-gray-200">{user?.isEmailVerified ? 'Yes' : 'No'}</span>
             </div>
           </div>
         </div>

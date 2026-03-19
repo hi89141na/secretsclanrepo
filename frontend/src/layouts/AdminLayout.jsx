@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -6,7 +6,8 @@ import {
   ShoppingCart, 
   Users, 
   FolderTree, 
-  MessageSquare, 
+  MessageSquare,
+  Tag, 
   LogOut,
   Menu,
   X,
@@ -64,6 +65,7 @@ const AdminLayout = () => {
     { icon: Package, label: 'Products', path: '/admin/products' },
     { icon: Users, label: 'Users', path: '/admin/users' },
     { icon: FolderTree, label: 'Categories', path: '/admin/categories' },
+    { icon: Tag, label: 'Manage Offers', path: '/admin/offers' },
     { icon: MessageSquare, label: 'Contact Messages', path: '/admin/contact' },
   ];
 

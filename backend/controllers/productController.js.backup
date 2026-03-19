@@ -1,66 +1,5 @@
-﻿const Product = require('../models/Product');
-const Offer = require('../models/Offer');
+const Product = require('../models/Product');
 const { uploadToCloudinary, deleteFromCloudinary } = require('../utils/cloudinary');
-const { getApplicableOffers, applyBestDiscount } = require('../services/pricingService');
-
-/**
- * Apply active offers to products
- */
-const applyOffersToProducts = async (products) => {
-  try {
-    const now = new Date();
-    const activeOffers = await Offer.find({
-      isActive: true,
-      startDate: { $lte: now },
-      endDate: { $gte: now }
-    }).populate('applicableCategories').populate('applicableProducts');
-
-    if (!activeOffers || activeOffers.length === 0) {
-      return products;
-    }
-
-    return products.map(product => {
-      const productObj = product.toObject ? product.toObject() : product;
-      const applicableOffers = getApplicableOffers(productObj, activeOffers);
-      
-      if (applicableOffers.length > 0) {
-        // Get best offer (highest discount)
-        let bestOffer = applicableOffers[0];
-        let bestDiscount = 0;
-        
-        applicableOffers.forEach(offer => {
-          const pricing = applyBestDiscount(productObj, offer);
-          const discount = productObj.price - pricing.price;
-          if (discount > bestDiscount) {
-            bestDiscount = discount;
-            bestOffer = offer;
-          }
-        });
-
-        const pricing = applyBestDiscount(productObj, bestOffer);
-        
-        if (pricing.discountSource === 'offer') {
-          return {
-            ...productObj,
-            originalPrice: pricing.originalPrice,
-            discountedPrice: pricing.price,
-            appliedOffer: {
-              _id: bestOffer._id,
-              title: bestOffer.title,
-              discountType: bestOffer.discountType,
-              discountValue: bestOffer.discountValue
-            }
-          };
-        }
-      }
-      
-      return productObj;
-    });
-  } catch (error) {
-    console.error('Error applying offers to products:', error);
-    return products;
-  }
-};
 
 const getProducts = async (req, res) => {
   try {
@@ -76,13 +15,8 @@ const getProducts = async (req, res) => {
       if (minPrice) filter.price.$gte = parseFloat(minPrice);
       if (maxPrice) filter.price.$lte = parseFloat(maxPrice);
     }
-    
     const products = await Product.find(filter).populate('category', 'name slug').sort({ createdAt: -1 });
-    
-    // Apply active offers to products
-    const productsWithOffers = await applyOffersToProducts(products);
-    
-    res.json({ success: true, count: productsWithOffers.length, data: productsWithOffers });
+    res.json({ success: true, count: products.length, data: products });
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -92,11 +26,7 @@ const getProducts = async (req, res) => {
 const getFeaturedProducts = async (req, res) => {
   try {
     const products = await Product.find({ featured: true }).populate('category', 'name slug').limit(8);
-    
-    // Apply active offers to products
-    const productsWithOffers = await applyOffersToProducts(products);
-    
-    res.json({ success: true, count: productsWithOffers.length, data: productsWithOffers });
+    res.json({ success: true, count: products.length, data: products });
   } catch (error) {
     res.status(500);
     throw new Error(error.message);
@@ -122,10 +52,7 @@ const getProduct = async (req, res) => {
       });
     }
     
-    // Apply active offers to single product
-    const [productWithOffer] = await applyOffersToProducts([product]);
-    
-    res.json({ success: true, data: productWithOffer });
+    res.json({ success: true, data: product });
   } catch (error) {
     console.error('Get product error:', error);
     res.status(500).json({ 
@@ -139,11 +66,7 @@ const getProductsByCategory = async (req, res) => {
   try {
     const products = await Product.find({ category: req.params.categoryId })
       .populate('category', 'name slug');
-    
-    // Apply active offers to products
-    const productsWithOffers = await applyOffersToProducts(products);
-    
-    res.json({ success: true, count: productsWithOffers.length, data: productsWithOffers });
+    res.json({ success: true, count: products.length, data: products });
   } catch (error) {
     console.error('Get products by category error:', error);
     res.status(500).json({ 
@@ -152,7 +75,6 @@ const getProductsByCategory = async (req, res) => {
     });
   }
 };
-
 const createProduct = async (req, res) => {
   try {
     let { name, description, price, category, stock, brand, images, featured, salePrice, saleStartDate, saleEndDate } = req.body;
@@ -168,7 +90,7 @@ const createProduct = async (req, res) => {
       const uploadResults = await Promise.all(uploadPromises);
       imageUrls = uploadResults.map((result) => result.secure_url);
     } else if (req.body.image) {
-      imageUrls = [req.body.image];
+      imageUrls = [req.body.image];  // FIXED: Changed from product.images to imageUrls
     } else if (images) {
       if (typeof images === 'string') {
         try {
@@ -270,3 +192,5 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = { getProducts, getFeaturedProducts, getProduct, getProductsByCategory, createProduct, updateProduct, deleteProduct };
+
+

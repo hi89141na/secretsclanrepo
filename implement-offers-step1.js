@@ -1,4 +1,11 @@
-const mongoose = require('mongoose');
+﻿const fs = require("fs");
+const path = require("path");
+
+console.log("\n🔧 Starting Store-Wide Offers System Implementation...\n");
+
+// File 1: Update Offer Model
+const offerModelPath = path.join(__dirname, "backend", "models", "Offer.js");
+const offerModelContent = `const mongoose = require('mongoose');
 
 const offerSchema = new mongoose.Schema({
   title: {
@@ -76,3 +83,13 @@ offerSchema.pre('save', function(next) {
 });
 
 module.exports = mongoose.model('Offer', offerSchema);
+`;
+
+try {
+  fs.writeFileSync(offerModelPath, offerModelContent, "utf8");
+  console.log("✅ Updated: backend/models/Offer.js");
+} catch (err) {
+  console.error("❌ Error updating Offer.js:", err.message);
+}
+
+console.log("\n✨ Step 1/10 Complete - Offer Model Updated\n");

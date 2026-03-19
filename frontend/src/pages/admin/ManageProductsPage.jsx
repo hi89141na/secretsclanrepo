@@ -284,8 +284,7 @@ const ManageProductsPage = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full Rs. ${
-                          product.stock > 10
+className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${                          product.stock > 10
                             ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200'
                             : product.stock > 0
                             ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200'
